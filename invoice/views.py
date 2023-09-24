@@ -104,3 +104,50 @@ class Update_invoice(views.APIView):
                             'message':"You are not authorized to perform this operation",
                             'data':None
                         },status=status.HTTP_403_FORBIDDEN)
+        
+
+
+
+
+class Delete_invoice(views.APIView):
+    ''' delete a todo with given slug '''
+    def delete(self,request,*args,**kwargs):
+        try:
+            invoice_slug  = request.data.get('slug_field')
+            if invoice_slug:
+                invoice = Invoice.objects.get(slug_field=invoice_slug)
+                
+                if invoice:
+                    is_verified = is_user_owner(invoice.customer_name,request.user)
+                    if is_verified:
+                        invoice.delete()
+                        return response.Response({
+                            'status':1,
+                            'message':"Todo deleted successfully",
+                            'data':None
+                        },status=status.HTTP_200_OK)
+                    else:
+                        return response.Response({
+                            'status':0,
+                            'message':"You are not authorized to perform this operation",
+                            'data':None
+                        },status=status.HTTP_403_FORBIDDEN)
+                else:
+                    return response.Response({
+                        'status':0,
+                        'message':"Todo does not exist",
+                        "data":None
+
+                    },status=status.HTTP_404_NOT_FOUND)
+            else:
+                return response.Response({
+                    'status':0,
+                    'message':"Please provide todo slug to be deleted",
+                    'data':None
+                },status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return response.Response({
+                    'status':0,
+                    'message':"Internal server error",
+                    'data':None
+                },status=status.HTTP_500_INTERNAL_SERVER_ERROR)

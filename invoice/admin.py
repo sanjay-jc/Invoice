@@ -6,7 +6,7 @@ from .models import (
 
 @admin.register(Invoice)
 class Invoice_admin(admin.ModelAdmin):
-    list_display = ["date","customer_name"]
+    list_display = ["date","customer_name","slug_field"]
 
 @admin.register(Invoice_details)
 class Invoice_details_admin(admin.ModelAdmin):
