@@ -1,0 +1,208 @@
+{
+  "info": {
+    "_postman_id": "779d15a7-23c5-4306-92ef-e39d70658a92",
+    "name": "Invoice Copy",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "29819294"
+  },
+  "item": [
+    {
+      "name": "Register",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"username\":\"sanjay\",\n    \"password\":\"primalcodes123\",\n    \"first_name\":\"sanjay\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:8000/account/register",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["account", "register"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login",
+
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"username\":\"sanjay\",\n    \"password\":\"primalcodes123\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:8000/account/login",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["account", "login"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List Invoice",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token bc2a4bd2df300db54779076e761f4ed7422cb68e",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"username\":\"sanjay\",\n    \"password\":\"primalcodes123\",\n    \"first_name\":\"sanjay\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:8000/invoice/list-invoice",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["invoice", "list-invoice"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create new invoice",
+
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token bc2a4bd2df300db54779076e761f4ed7422cb68e",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\n   \"date\":\"2023-09-27\",\n   \"invoice_details\":[\n       {\n           \"description\":\"test5\",\n           \"quantity\":\"5\",\n           \"unit_price\":\"10\",\n           \"price\":\"50\"\n       }\n   ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:8000/invoice/create-invoice",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["invoice", "create-invoice"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Invoice",
+
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token bc2a4bd2df300db54779076e761f4ed7422cb68e",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\n    \"slug_field\":\"f686d113-15a9-4\",\n     \"customer_name\": \"sanjay\",\n        \"date\": \"2023-09-29\",\n        \"invoice_details\": [\n            {\n                \"status\": true,\n                \"description\": \"test34 updated\",\n                \"quantity\": 5,\n                \"unit_price\": 10,\n                \"price\": 50\n            }\n        ]\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:8000/invoice/update-invoice",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["invoice", "update-invoice"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Invoice",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token 33f5c02fc0f34e761d0846d295995ca2dfab7543",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\n    \"slug_field\":\"f686d113-15a9-4\"\n\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:8000/invoice/delete-invoice",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["invoice", "delete-invoice"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Invoice Details",
+
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token 33f5c02fc0f34e761d0846d295995ca2dfab7543",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\n    \"slug_field\":\"21dfd392-085f-4\"\n\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:8000/invoice/invoice-details",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["invoice", "invoice-details"]
+        }
+      },
+      "response": []
+    }
+  ]
+}

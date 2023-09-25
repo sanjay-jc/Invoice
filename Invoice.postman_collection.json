@@ -1,0 +1,406 @@
+{
+	"info": {
+		"_postman_id": "dcc7c63c-f9f2-45d5-97e2-3443f2b187fe",
+		"name": "Invoice",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29819294"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\":\"sanjay\",\n    \"password\":\"primalcodes123\",\n    \"first_name\":\"sanjay\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/account/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"account",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Status should be equal to 0\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData.status).to.equal(0);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Message is a non-empty string\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData.message).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Token is a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData.token).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Token should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\":\"sanjay\",\n    \"password\":\"primalcodes123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/account/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"account",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Invoice",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token bc2a4bd2df300db54779076e761f4ed7422cb68e",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\":\"sanjay\",\n    \"password\":\"primalcodes123\",\n    \"first_name\":\"sanjay\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/invoice/list-invoice",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"invoice",
+						"list-invoice"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new invoice",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 201\", function () {",
+							"  pm.expect(pm.response.code).to.equal(201);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Validate the 'data' object\", function () {",
+							"  const responseData = pm.response.json();",
+							"",
+							"  pm.expect(responseData.data).to.exist;",
+							"  pm.expect(responseData.data).to.be.an('object');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Verify the presence and length of invoice_details array\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.data).to.exist.and.to.be.an('object');",
+							"    pm.expect(responseData.data.invoice_details).to.exist.and.to.be.an('array');",
+							"    pm.expect(responseData.data.invoice_details).to.have.lengthOf(1);",
+							"});",
+							"",
+							"",
+							"pm.test(\"The slug_field should be a non-empty string\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData).to.be.an('object');",
+							"  pm.expect(responseData.data.slug_field).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token bc2a4bd2df300db54779076e761f4ed7422cb68e",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\n   \"date\":\"2023-09-27\",\n   \"invoice_details\":[\n       {\n           \"description\":\"test5\",\n           \"quantity\":\"5\",\n           \"unit_price\":\"10\",\n           \"price\":\"50\"\n       }\n   ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/invoice/create-invoice",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"invoice",
+						"create-invoice"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Invoice",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 404\", function () {",
+							"  pm.response.to.have.status(404);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.status).to.exist.and.to.be.a('number');",
+							"    pm.expect(responseData.message).to.exist.and.to.be.a('string');",
+							"    pm.expect(responseData.data).to.exist;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Status is a non-negative integer\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData.status).to.be.a('number');",
+							"  pm.expect(responseData.status).to.be.at.least(0);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Message is a non-empty string\", function () {",
+							"  const responseData = pm.response.json();",
+							"",
+							"  pm.expect(responseData.message).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Data is null\", function () {",
+							"  const responseData = pm.response.json();",
+							"",
+							"  pm.expect(responseData.data).to.be.null;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token bc2a4bd2df300db54779076e761f4ed7422cb68e",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\n    \"slug_field\":\"f686d113-15a9-4\",\n     \"customer_name\": \"sanjay\",\n        \"date\": \"2023-09-29\",\n        \"invoice_details\": [\n            {\n                \"status\": true,\n                \"description\": \"test34 updated\",\n                \"quantity\": 5,\n                \"unit_price\": 10,\n                \"price\": 50\n            }\n        ]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/invoice/update-invoice",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"invoice",
+						"update-invoice"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Invoice",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "token 33f5c02fc0f34e761d0846d295995ca2dfab7543",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\n    \"slug_field\":\"f686d113-15a9-4\"\n\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/invoice/delete-invoice",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"invoice",
+						"delete-invoice"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invoice Details",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Validate the status field in the response\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.status).to.exist.and.to.be.a('number');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Message field is a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData.message).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Verify that the 'data' object is present in the response\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.data).to.exist;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Validate the 'date' field is a valid date\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData.data).to.be.an('object');",
+							"    pm.expect(responseData.data.date).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "token 33f5c02fc0f34e761d0846d295995ca2dfab7543",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\n    \"slug_field\":\"21dfd392-085f-4\"\n\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8000/invoice/invoice-details",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"invoice",
+						"invoice-details"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
