@@ -78,7 +78,6 @@ class List_todo_test(APITestCase):
         )
         
         response = self.client.get(self.list_invoice)
-        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(len(response.data['data']), 3) 
 
@@ -94,18 +93,104 @@ class List_todo_test(APITestCase):
             unit_price = 34,
             quantity = 30
         )
+
+        response = self.client.get(self.list_invoice)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(len(response.data['data']), 2) 
+
+    def test_show_todo_invalid_user(self):
+        user1 = User.objects.create_user(username='testuser1@email.com', password='testpassword')
+        user2 = User.objects.create_user(username='testuser2@email.com', password='testpassword')
+
+        self.client.force_authenticate(user=user1)
+
+        invoice = Invoice.objects.create(
+            date='2023-09-26',
+            customer_name=user1,
+        )
+
+        invoice_detail = Invoice_details.objects.create(
+            invoice=invoice,
+            description='this is a test case2',
+            price=20,
+            unit_price=34,
+            quantity=30
+        )
+
+        self.client.force_authenticate(user=user2)
+        response = self.client.get(self.list_invoice)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+class Test_create_todo(APITestCase):
+
+    def setUp(self):
+        self.create_url = reverse('create_invoice')
+        self.user = User.objects.create_user(username='testuser@email.com', password='testpassword')
+        self.client.force_authenticate(user=self.user)
+        self.token = Token.objects.create(user = self.user)
+
+    def test_create_todo(self):
+        self.valid_invoice_data = {
+            'date': '2023-09-27',
+            'invoice_details': [
+                {
+                    "description":"test_detaisl",
+                    "unit_price":"30",
+                    "quantity":"2",
+                    "price":"10"
+                }
+            ]
+            
+        }
+        response = self.client.post(self.create_url, self.valid_invoice_data, format='json')
+  
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+    def test_create_todo_missing_fields(self):
+        self.valid_todo_data = {
+            'date': '2023-09-27',
+            'invoice_details': [
+                {
+                    "description":"test_detaisl",
+                    "quantity":"2",
+                    "price":"10"
+                }
+            ]      
+        }
+        response = self.client.post(self.create_url, self.valid_todo_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+
+class Test_delet_todo(APITestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(username='testuser@email.com', password='testpassword')
+        self.other_user = get_user_model().objects.create_user(username='otheruser@email.com', password='otherpassword')
+        self.client.force_authenticate(user=self.user)
+        self.create_url = reverse('create_invoice')
+        self.invoice = Invoice.objects.create(
+            date='2023-09-26',
+            customer_name=self.user,
+        )
         Invoice_details.objects.create(
             invoice = self.invoice,
-            description = 'this is a test case2',
+            description = 'this is a test case1',
             price = 20,
             unit_price = 34,
             quantity = 30
         )
-        response = self.client.get(self.list_invoice)
-        print(response.data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(len(response.data['data']), 2) 
+        self.delete_url = reverse('delete_invoice') 
 
-    def test_show_todos_with_no_existing_todos(self):
-        response = self.client.get(self.list_invoice)
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_delete_own_invoice(self):
+        # Include the slug in request.data for deletion
+        delete_data = {'slug_field': self.invoice.slug_field}
+
+        response = self.client.delete(self.delete_url, data=delete_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)        
+        self.assertFalse(Invoice.objects.filter(slug_field=self.invoice.slug_field).exists())
+
+
